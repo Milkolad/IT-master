@@ -1,2 +1,2 @@
-# TI-master
+# IT-master
 IT-master
