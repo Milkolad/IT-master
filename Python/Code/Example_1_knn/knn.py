@@ -1,14 +1,9 @@
 import math
-import pandas as pd
 
-def metric(station1, station2):
-    return math.fabs(station1['Order'] - station2['Order'])
+class Knn:
+    def __init__(self, trainData, testData, k, numberOfClasses):
+        фф
 
-def indexer(data, indexies):
-    result = pd.DataFrame({'Name' : [], 'Type' : []})
-    
-    return result
-
-def compute(data, scored_data, station):
-    result = 0
-    return result
+    def compute(self, station):
+        result = 0
+        return result
