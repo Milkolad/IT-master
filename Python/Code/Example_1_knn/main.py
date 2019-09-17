@@ -1,16 +1,17 @@
-import pandas as pd
 import numpy as np
-import knn
+from knn import Knn
+from metro import Metro, Line, Station
 
 
 def main():
-    metro_df = pd.read_csv("list_of_moscow_metro_stations.csv")
-    station1 = metro_df.loc[0, :]
-    station2 = metro_df.loc[3, :]
-    print(station1['Name'])
-    print(station2['Name'])
-    print(knn.metric(station1, station2))
+    metro = Metro("list_of_moscow_metro_stations.csv", "list_of_moscow_metro_stations_changes.csv")
 
+    print([station.name for station in metro.get_line('Сокольническая').stations])
+    print(metro.get_line('D3'))
+
+    knn = Knn(metro, ['Окружная', 'Кофе'])
+    print(knn.compute('Окружная'))
+    print(metro.get_line('Замоскворецкая').get_length('Ховрино', 'Сокол'))
     
 if __name__ == "__main__":
     main()

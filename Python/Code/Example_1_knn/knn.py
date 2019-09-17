@@ -2,7 +2,7 @@ import math
 
 class Knn:
     def __init__(self, trainData, testData, k, numberOfClasses):
-        фф
+        
 
     def compute(self, station):
         result = 0
