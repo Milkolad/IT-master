@@ -12,11 +12,11 @@ class Metro:
             self.lines.append(Line(stations_list, [], line))
 
     def get_line(self, line_name):
-        return [line for line in self.lines if line.name == line_name][0]
+        return next(iter([line for line in self.lines if line.name == line_name][:1]), None)
 
     def find_station(self, station_name):
         for line in self.lines:
-            station = line.get_station()
+            station = line.get_station(station_name)
             if station is not None:
                 return station
         return None
@@ -28,12 +28,11 @@ class Metro:
             if start.line_name == end.line_name:
                 return self.get_line(start.line_name).get_length(start_name, end_name)
             else:
-                start_line = self.get_line(start.line_name)
-                sub_end = start_line.get_change(end.line_name)
-                sub_start = 
-                return 999
+                sub_end = self.get_line(start.line_name).get_change(end.line_name)
+                sub_start = sub_end.change(end.line_name)
+                return  int(math.fabs(start.order - sub_end.order)) + int(math.fabs(sub_start.order - end.order))
         else:
-            return -1
+            return None
 
 
 class Line:
@@ -42,12 +41,12 @@ class Line:
         self.name = name
 
     def get_station(self, station_name):
-        return [station for station in self.stations if station.name == station_name][0] or None
+        return next(iter([station for station in self.stations if station.name == station_name][:1]), None)
 
     def get_length(self, start_name, end_name):
-        start = [station for station in self.stations if station.name == start_name][0]
-        end = [station for station in self.stations if station.name == end_name][0]
-        return int(math.fabs(start.order - end.order))
+        start = next(iter([station for station in self.stations if station.name == start_name][:1]), None)
+        end = next(iter([station for station in self.stations if station.name == end_name][:1]), None)
+        return int(math.fabs(start.order - end.order)) if start != None and end != None else 0
 
     def get_change(self, line_name):
         return 0 #station

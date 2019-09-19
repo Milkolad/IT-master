@@ -9,9 +9,9 @@ def main():
     print([station.name for station in metro.get_line('Сокольническая').stations])
     print(metro.get_line('D3'))
 
-    knn = Knn(metro, ['Окружная', 'Кофе'])
+    knn = Knn(metro, ['Окружная', 'Кофе'], 0, 0)
     print(knn.compute('Окружная'))
-    print(metro.get_line('Замоскворецкая').get_length('Ховрино', 'Сокол'))
+    print(metro.get_length('Ховрино', 'Сокол'))
     
 if __name__ == "__main__":
     main()
