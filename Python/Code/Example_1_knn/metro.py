@@ -9,7 +9,8 @@ class Metro:
         self.lines = []
         for line in lines_list:
             stations_list = (metro_df.loc[metro_df['Line'].str.strip() == line, ['Name', 'Line', 'Order']]).values.tolist()
-            self.lines.append(Line(stations_list, [], line))
+            changes_list = (changes_df.loc[changes_df['LineFrom'].str.strip() == line, ['LineFrom', 'LineTo', 'NameFrom', 'NameTo']]).values.tolist()
+            self.lines.append(Line(stations_list, changes_list, line))
 
     def get_line(self, line_name):
         return next(iter([line for line in self.lines if line.name == line_name][:1]), None)
@@ -49,7 +50,7 @@ class Line:
         return int(math.fabs(start.order - end.order)) if start != None and end != None else 0
 
     def get_change(self, line_name):
-        return 0 #station
+        return 0 
 
 class Station:
     def __init__(self, station, changes):

@@ -1,8 +1,4 @@
 {
     "workbench.settings.editor": "json",
-    "python.autoComplete.extraPaths": [
-        "C:\\Python37\\Lib\\site-packages",
-        "C:\\Python37\\Lib\\site-packages\\pandas",
-        "C:\\Users\\Maxim.Eremin\\AppData\\Roaming\\Python\\Python37\\site-packages"
-    ],
+    "python.pythonPath": "C:\\Users\\mdere\\AppData\\Local\\Programs\\Python\\Python37-32\\python.exe"
 }
