@@ -12,6 +12,7 @@ def main():
     knn = Knn(metro, ['Окружная', 'Кофе'], 0, 0)
     print(knn.compute('Окружная'))
     print(metro.get_length('Ховрино', 'Сокол'))
+    return 0
     
 if __name__ == "__main__":
     main()
