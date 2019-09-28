@@ -28,8 +28,11 @@ class Automat:
         return self.vector
 
     def run(self):
-        for i in range(1, len(self.vector) - 2):
+        for i in range(1, len(self.vector) - 1):
+            #print(f"Iteration: {i}")
             frame = f"{self.vector[i - 1]}{self.vector[i]}{self.vector[i + 1]}"
+            #print(f"Frame: {frame}")
             rule_value = self.rule[frame]
+            #print(f"Frame value: {rule_value}")
             self.vector[i] = rule_value
         print(self.vector)
