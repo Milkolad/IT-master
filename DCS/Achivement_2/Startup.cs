@@ -26,11 +26,14 @@ namespace Achivement_2
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Latest);
+
             services.Configure<NumberstoreDatabaseSettings>(
                 Configuration.GetSection(nameof(NumberstoreDatabaseSettings))
             );
+
             services.AddSingleton<INumberstoreDatabaseSettings>(sp =>
                 sp.GetRequiredService<IOptions<NumberstoreDatabaseSettings>>().Value);
+
             services.AddTransient<IRepository<Number>, NumberRepository>();
         }
 

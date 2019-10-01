@@ -1,4 +1,6 @@
 using System.Linq;
+using System.Net;
+using System.Net.Http;
 using System.Threading.Tasks;
 using Achivement_2.Models;
 using Achivement_2.Repository;
@@ -9,7 +11,7 @@ using Newtonsoft.Json;
 namespace Achivement_2.Controllers
 {
     [ApiController]
-    [Route("api/values")]
+    [Route("/increment")]
     public class ValueController : ControllerBase
     {
         private readonly IRepository<Number> _repository;
@@ -19,31 +21,35 @@ namespace Achivement_2.Controllers
         }
 
         [HttpGet]
-        public ActionResult<string> Get()
+        public ActionResult<HttpResponseMessage> Get()
         {
-            string result = "";
-            result = JsonConvert.SerializeObject(_repository.Get());
-            return new ActionResult<string>(result);
+            HttpResponseMessage result = new HttpResponseMessage();
+            result.Content = new StringContent(JsonConvert.SerializeObject(_repository.Get()));
+            return result;
         }
 
         [HttpPost]
-        public ActionResult<string> Post([FromBody]Number item)
+        public ActionResult<HttpResponseMessage> Post([FromBody]Number item)
         {
-            string result = "";
+            HttpResponseMessage result = new HttpResponseMessage();
             var numbers = _repository.Get().ToList();
-            Number number = numbers.Find(x => x.Value == item.Value);
+            Number number = numbers.Last();
             if (numbers.Count == 0 || number == default(Number))
             {
                 Number new_number = _repository.Add(item);
-                result = (new_number.Value + 1).ToString();
+                result.Content = new StringContent((new_number.Value + 1).ToString());
+                result.ReasonPhrase = "OK";
+                result.StatusCode = HttpStatusCode.OK;
             } else if (number.Value == item.Value)
             {
-                result = "Exception 1: number is already added";
+                result.ReasonPhrase = "Exception 1: number is already added";
+                result.StatusCode = HttpStatusCode.BadRequest;
             } else if (number.Value > item.Value)
             {
-                result = "Exception 2: number is less than added";
+                result.ReasonPhrase = "Exception 2: number is less than added";
+                result.StatusCode = HttpStatusCode.BadRequest;
             }
-            return new ActionResult<string>(result);
+            return result;
         }
     }
 }
