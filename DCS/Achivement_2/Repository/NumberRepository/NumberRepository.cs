@@ -8,31 +8,31 @@ namespace Achivement_2.Repository
     {
         private readonly MongoClient _client;
         private readonly IMongoDatabase _dataBase;
-        private readonly IMongoCollection<Number> _numbers;
+        private readonly IMongoCollection<NumberEntity> _numbers;
         public NumberRepository(INumberstoreDatabaseSettings settings)
         {
             _client = new MongoClient(settings.ConnectionString);
             _dataBase = _client.GetDatabase(settings.DatabaseName);
-            _numbers = _dataBase.GetCollection<Number>(settings.NumbersCollectionName);
+            _numbers = _dataBase.GetCollection<NumberEntity>(settings.NumbersCollectionName);
         }
-        public Number Add(Number item)
+        public NumberEntity Add(NumberEntity item)
         {
-            Number result = null;
+            NumberEntity result = null;
             _numbers.InsertOne(item);
-            result = _numbers.Find(number => number.Value == item.Value).FirstOrDefault();
+            result = _numbers.Find(number => number.Number == item.Number).FirstOrDefault();
             return result;
         }
 
-        public bool Delete(Number item)
+        public bool Delete(NumberEntity item)
         {
             DeleteResult result = _numbers.DeleteOne(number => number.Id == item.Id);
             return result.IsAcknowledged;
         }
 
-        public IEnumerable<Number> Get()
+        public IEnumerable<NumberEntity> Get()
         {
-            List<Number> result = null;
-            result = _numbers.Find(number => number is Number).ToList();
+            List<NumberEntity> result = null;
+            result = _numbers.Find(number => number is NumberEntity).ToList();
             return result;
         } 
     }

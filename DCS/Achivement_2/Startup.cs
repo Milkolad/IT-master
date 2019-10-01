@@ -34,7 +34,7 @@ namespace Achivement_2
             services.AddSingleton<INumberstoreDatabaseSettings>(sp =>
                 sp.GetRequiredService<IOptions<NumberstoreDatabaseSettings>>().Value);
 
-            services.AddTransient<IRepository<Number>, NumberRepository>();
+            services.AddTransient<IRepository<NumberEntity>, NumberRepository>();
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
@@ -49,7 +49,12 @@ namespace Achivement_2
             }
 
             app.UseHttpsRedirection();
-            app.UseMvc();
+            app.UseMvc(routes =>
+            {
+                routes.MapRoute(
+                    name: "default",
+                    template: "{controller=ValueController}");
+            });
         }
     }
 }
