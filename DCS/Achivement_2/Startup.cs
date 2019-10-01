@@ -23,12 +23,14 @@ namespace Achivement_2
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+            } 
+            else
+            {
+                app.UseHsts();
             }
 
-            app.Run(async (context) =>
-            {
-                await context.Response.WriteAsync("Hello World!");
-            });
+            app.UseHttpsRedirection();
+            app.UseMvc();
         }
     }
 }

@@ -12774,28 +12774,31 @@
       "Microsoft.AspNetCore.App >= 2.1.1",
       "Microsoft.AspNetCore.Razor.Design >= 2.1.2",
       "Microsoft.NETCore.App >= 2.1.0",
-      "MongoDB.Driver"
+      "MongoDB.Driver >= 2.9.1"
     ]
   },
   "packageFolders": {
-    "C:\\Users\\Maxim.Eremin\\.nuget\\packages\\": {},
+    "C:\\Users\\mdere\\.nuget\\packages\\": {},
+    "C:\\Microsoft\\Xamarin\\NuGet\\": {},
     "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Maxim.Eremin\\source\\repos\\IT-master\\DCS\\Achivement_2\\Achivement_2.csproj",
+      "projectUniqueName": "c:\\Users\\mdere\\source\\repos\\IT-master\\DCS\\Achivement_2\\Achivement_2.csproj",
       "projectName": "Achivement_2",
-      "projectPath": "C:\\Users\\Maxim.Eremin\\source\\repos\\IT-master\\DCS\\Achivement_2\\Achivement_2.csproj",
-      "packagesPath": "C:\\Users\\Maxim.Eremin\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Maxim.Eremin\\source\\repos\\IT-master\\DCS\\Achivement_2\\obj\\",
+      "projectPath": "c:\\Users\\mdere\\source\\repos\\IT-master\\DCS\\Achivement_2\\Achivement_2.csproj",
+      "packagesPath": "C:\\Users\\mdere\\.nuget\\packages\\",
+      "outputPath": "c:\\Users\\mdere\\source\\repos\\IT-master\\DCS\\Achivement_2\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
+        "C:\\Microsoft\\Xamarin\\NuGet\\",
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
       ],
       "configFilePaths": [
-        "C:\\Users\\Maxim.Eremin\\AppData\\Roaming\\NuGet\\NuGet.Config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        "C:\\Users\\mdere\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
       ],
       "originalTargetFrameworks": [
         "netcoreapp2.1"
@@ -12836,7 +12839,7 @@
           },
           "MongoDB.Driver": {
             "target": "Package",
-            "version": "(, )"
+            "version": "[2.9.1, )"
           }
         },
         "imports": [
