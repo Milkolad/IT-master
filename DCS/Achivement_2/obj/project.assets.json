@@ -12785,11 +12785,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "c:\\Users\\mdere\\source\\repos\\IT-master\\DCS\\Achivement_2\\Achivement_2.csproj",
+      "projectUniqueName": "C:\\Users\\mdere\\source\\repos\\IT-master\\DCS\\Achivement_2\\Achivement_2.csproj",
       "projectName": "Achivement_2",
-      "projectPath": "c:\\Users\\mdere\\source\\repos\\IT-master\\DCS\\Achivement_2\\Achivement_2.csproj",
+      "projectPath": "C:\\Users\\mdere\\source\\repos\\IT-master\\DCS\\Achivement_2\\Achivement_2.csproj",
       "packagesPath": "C:\\Users\\mdere\\.nuget\\packages\\",
-      "outputPath": "c:\\Users\\mdere\\source\\repos\\IT-master\\DCS\\Achivement_2\\obj\\",
+      "outputPath": "C:\\Users\\mdere\\source\\repos\\IT-master\\DCS\\Achivement_2\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Microsoft\\Xamarin\\NuGet\\",
