@@ -28,7 +28,6 @@
     "Achivement_2": {
       "commandName": "Project",
       "launchBrowser": true,
-      "applicationUrl": "https://localhost:5000;http://localhost:5001",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Production",
         "DB_HOST" : "",

@@ -35,18 +35,17 @@ namespace Achivement_2
                 sp.GetRequiredService<IOptions<NumberstoreDatabaseSettings>>().Value);
 
             services.AddTransient<IRepository<NumberEntity>, NumberRepository>();
+
+             services.AddHttpsRedirection(options =>
+            {
+                options.RedirectStatusCode = StatusCodes.Status308PermanentRedirect;
+                options.HttpsPort = 443;
+            });
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            } 
-            else
-            {
-                app.UseHsts();
-            }
+            app.UseDeveloperExceptionPage();
 
             app.UseHttpsRedirection();
             app.UseMvc(routes =>
