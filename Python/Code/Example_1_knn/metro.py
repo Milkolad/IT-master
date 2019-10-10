@@ -1,6 +1,7 @@
 import pandas as pd
 import math
 
+
 class Metro:
     def __init__(self, stations, changes):
         metro_df = pd.read_csv(stations)
