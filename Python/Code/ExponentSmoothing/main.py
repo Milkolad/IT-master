@@ -1,78 +1,37 @@
-from math import floor, sqrt, isnan
-import decimal
-import matplotlib.pyplot as plt
-import numpy as np
-import os
-from exponentsmoothing import exponential_smoothing
-import time
 import sys
+from smoother import Smoother
 
-def flooring(x):
-    result = 0
-    if not isnan(x):
-        result = floor(decimal.Decimal(x))
-    return result
-
-def open_data(path):
-    result = []
-
-    print(f'Loading.\t')
-
-    start_t = time.perf_counter()
-
-    result = np.fromfile(path)
-
-    end_t = time.perf_counter()
-
-    print(f'Loaded.\t')
-    print(f'Time has passed:\t{end_t - start_t}\t\n')
-    return result
-
-def split_data(data, start = 0, end = 0):
-    Y = data[:end]
-    print(f'Preparing.\t')
-    print(f'Data Length:\t{len(Y)}\t')
-
-    Y_result = []
-
-    start_t = time.perf_counter()
-
-    for dot in Y:
-        Y_result.append(-flooring(dot))
-
-    end_t = time.perf_counter()
-
-    X = range(start, end)
-    
-    print(f'Prepared.\t')
-    print(f'Time has passed:\t{end_t - start_t}\tData Length:\t{len(Y)}\t\n')
-    return X, Y_result
-
-def main():
+def main(filepath, start, end, alpha):
     print(f'Start\t\n')
 
-    path = "./I01.dat"
+    print(f'{filepath}\t{start}\t{end}\t{alpha}')
 
-    start = 0
-    end = 5000
-    alpha = 0.05
+    smoother = Smoother(filepath, start, end, alpha)
 
-    dataset = open_data(path)
-
-    X, Y = split_data(dataset, start=start, end=end)
-
-    before = plt.figure()
-    plt.plot(X, Y)
-    before.savefig('raw.png')
-
-    Y_prepared = exponential_smoothing(Y, alpha)
-
-    after = plt.figure()
-    plt.plot(X, Y_prepared)
-    after.savefig(f'smoothed_{alpha}.png')
-
+    if start is None and end is None and alpha is None:
+        smoother.plot(isRaw=True).savefig('Raw.png')
+    else:
+        smoother.plot(isRaw=False, alpha=alpha, start=start, end=end).savefig(f'smoothed_from_{start}_to_{end}_with_{alpha}.png')
     print(f'End\t\n')
     return 0
+
+def help():
+    print('=== Welcome to exponent smoothing method. ===\n\n')
+    print('For usage input next args:\n')
+    print('main.py <filepath> <start part of serial> <end part of serial> <filter coef> or main.py <filepath> -r, --raw')
+    print('<filepath>\tpath in unix way with .dat format')
+    print('<start>\tint number, which defines the start of the serial for smoothing')
+    print('<end>\tint number,which defines the end of the serial for smoothing')
+    print('<filter coef>\tcoefficient which defines the deep of smoothing. The less number makes the deeper smoothing')
+    print('-r, --raw for generating raw plot')
     
 if __name__ == "__main__":
-    main()
+    if len(sys.argv) < 1:
+        raise SyntaxError("No args. Please, start the program with needed arguments or start with -h, --help to read startup guide.")
+    elif len(sys.argv) < 4:
+        if str(sys.argv[1]) == '-h' or str(sys.argv[1]) == '--help':
+            help()
+        elif str(sys.argv[2]) == '-r' or str(sys.argv[2]) == '--raw':
+            main(str(sys.argv[1]), None, None, None)
+    else:
+        main(str(sys.argv[1]), int(sys.argv[2]), int(sys.argv[3]), float(sys.argv[4]))
