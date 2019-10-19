@@ -14,7 +14,7 @@ def swap(ar, n):
     for row in ar:
         print(' '.join([str(elem) for elem in row]))
         
-    counter = int(0)
+    counter = 0
     g = random.randint(1, n - 2)
     h = random.randint(1, n - 2)
     while (ar[g][h] == 0) or (happy(ar, g, h, counter, ar[g][h]) == 1):
@@ -38,6 +38,7 @@ def main():
     print("enter N")
     n = int(input())
     a = [[0] * n for i in range(n)]
+
     for i in range(n):
         for j in range(n):
             a[i][j] = random.randint(0, 100)
@@ -45,7 +46,7 @@ def main():
                 a[i][j] = 0
             else: 
                 a[i][j] = random.randint(1, 2)
-    cc = int(0)
+    cc = 0
     while 1:
         cc += 1
         print(cc)
