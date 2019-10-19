@@ -5,6 +5,7 @@ import numpy as np
 import os
 from exponentsmoothing import exponential_smoothing
 import time
+import sys
 
 def flooring(x):
     result = 0
@@ -15,20 +16,22 @@ def flooring(x):
 def open_data(path):
     result = []
 
-    print(f'Data is loading.')
+    print(f'Loading.\t')
 
-    start = time.perf_counter()
+    start_t = time.perf_counter()
 
     result = np.fromfile(path)
 
-    end = time.perf_counter()
+    end_t = time.perf_counter()
 
-    print(f'Data loaded.\tTime has passed:\t{end - start}')
+    print(f'Loaded.\t')
+    print(f'Time has passed:\t{end_t - start_t}\t\n')
     return result
 
 def split_data(data, start = 0, end = 0):
     Y = data[:end]
-    print(f'Data is starting to preparing.\tLength of data:\t{len(Y)}')
+    print(f'Preparing.\t')
+    print(f'Data Length:\t{len(Y)}\t')
 
     Y_result = []
 
@@ -41,16 +44,18 @@ def split_data(data, start = 0, end = 0):
 
     X = range(start, end)
     
-    print(f'Data is prepared.\tTime has passed:\t{end_t - start_t}\tLoaded dots:\t{len(Y)}')
+    print(f'Prepared.\t')
+    print(f'Time has passed:\t{end_t - start_t}\tData Length:\t{len(Y)}\t\n')
     return X, Y_result
 
 def main():
-    print('Start')
+    print(f'Start\t\n')
 
     path = "./I01.dat"
 
     start = 0
-    end = 200
+    end = 5000
+    alpha = 0.05
 
     dataset = open_data(path)
 
@@ -58,15 +63,15 @@ def main():
 
     before = plt.figure()
     plt.plot(X, Y)
-    before.savefig('before.png')
+    before.savefig('raw.png')
 
-    Y_prepared = exponential_smoothing(Y, 0.3)
+    Y_prepared = exponential_smoothing(Y, alpha)
 
     after = plt.figure()
     plt.plot(X, Y_prepared)
-    after.savefig('after.png')
+    after.savefig(f'smoothed_{alpha}.png')
 
-    print('End')
+    print(f'End\t\n')
     return 0
     
 if __name__ == "__main__":
