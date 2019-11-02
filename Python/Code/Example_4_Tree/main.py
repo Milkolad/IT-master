@@ -3,6 +3,7 @@ import numpy as np
 from argparse import ArgumentParser
 from ID3 import ID3
 from sklearn.tree import DecisionTreeClassifier
+from sklearn.model_selection import train_test_split
 from switcher import Switcher
 
 def main(path, predict_column):
@@ -10,6 +11,14 @@ def main(path, predict_column):
     columns = df.columns.values
     X = [df[column].values for column in columns if column != predict_column and column != 'Name']
     y = df[predict_column].values
+    
+
+    decisions = ID3()
+    fitted = decisions.fit(X, y)
+    print(f'Entropy of {predict_column}:\t\t\t{fitted[1]}\n')
+    print(f'Information Gains of Xs\n')
+    print(f'{str(list(filter(lambda x: x != predict_column and x != "Name", df.columns.values)))}')
+    print(f'{fitted[0]}')
 
     swtch = Switcher()
 
@@ -21,14 +30,12 @@ def main(path, predict_column):
 
     sk_y = np.array(swtch.convert_to(y)).T
 
-    decisions = ID3()
-    entropy= decisions.fit(X, y)
-    print(f'Entropies:\t\t\t{entropy}')
+    x_train, x_test, y_train, y_test = train_test_split(sk_X, sk_y, test_size=0.3)    
 
     sk_decisions = DecisionTreeClassifier(random_state=1370)
-    sk_decisions.fit(sk_X, sk_y)
-    print(f'SkLearn Tree Decision accuracy:\t{sk_decisions.score(sk_X, sk_y)}')
-    #print(sk_decisions.predict(['pycharm', 'Java', 'tea']))
+    sk_decisions.fit(x_train, y_train)
+    print(f'SkLearn Tree Decision accuracy:\t{sk_decisions.score(x_train, y_train)}')
+    print(f'SkLearn Tree Decision prediction: {sk_decisions.predict(x_test)}')
     return 0
 
 if __name__ == '__main__':
