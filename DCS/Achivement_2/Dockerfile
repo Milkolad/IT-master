@@ -1,13 +1,10 @@
 FROM microsoft/dotnet:2.1-aspnetcore-runtime AS base
 WORKDIR /app
-EXPOSE 80
-
-ENV APP_HOST localhost
-ENV APP_PORT 5000
+EXPOSE 80/tcp
+ENV ASPNETCORE_URLS http://+:80
 
 FROM microsoft/dotnet:2.1-sdk AS build
 WORKDIR /src
-EXPOSE 80
 
 COPY ["Achivement_2.csproj", "./"]
 RUN dotnet restore "Achivement_2.csproj"

@@ -39,7 +39,6 @@
     "Docker": {
       "commandName": "Docker",
       "launchBrowser": true,
-      "launchUrl" : "http://localhost:5000",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Production",
         "DB_HOST" : "",

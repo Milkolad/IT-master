@@ -44,6 +44,7 @@ namespace Achivement_2
             app.UseDeveloperExceptionPage();
 
             app.UseHttpsRedirection();
+            
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
