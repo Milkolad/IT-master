@@ -25,7 +25,7 @@ namespace Achivement_2
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Latest);
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
             services.Configure<NumberstoreDatabaseSettings>(
                 Configuration.GetSection(nameof(NumberstoreDatabaseSettings))
@@ -36,11 +36,7 @@ namespace Achivement_2
 
             services.AddTransient<IRepository<NumberEntity>, NumberRepository>();
 
-             services.AddHttpsRedirection(options =>
-            {
-                options.RedirectStatusCode = StatusCodes.Status308PermanentRedirect;
-                options.HttpsPort = 443;
-            });
+            
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)

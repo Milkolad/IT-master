@@ -17,10 +17,10 @@ def main(path, predict_column):
     fitted = decisions.fit(X, y)
     print(f'Entropy of {predict_column}:\t\t\t{fitted[1]}\n')
     print(f'Information Gains of Xs\n')
-    headers = ' '.join(map(str, list(filter(lambda x: x != predict_column and x != "Name", df.columns.values)))).replace(' ', '\t\t')
+    headers = ' '.join(map(str, list(filter(lambda x: x != predict_column and x != "Name", df.columns.values)))).replace(' ', '\t | ')
     print(f'{headers}')
-    values = ' '.join(map(str, fitted[0])).replace(' ', '\t')
-    print(f'{values}')
+    values = ' '.join(map(lambda x: "{0:.8f}".format(x), fitted[0])).replace(' ', '\t | ')
+    print(values)
     print('\n\n')
 
     swtch = Switcher()

@@ -3,13 +3,12 @@
     "windowsAuthentication": false, 
     "anonymousAuthentication": true, 
     "iisExpress": {
-      "applicationUrl": "http://localhost:7467",
       "sslPort": 44356,
       "DB_HOST" : "",
       "DB_PORT" : "",
       "DB_NAME" : "",
       "APP_PORT" : "5000",
-        "APP_HOST" : "localhost"
+      "APP_HOST" : "localhost"
     }
   },
   "profiles": {
@@ -17,7 +16,7 @@
       "commandName": "IISExpress",
       "launchBrowser": true,
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Production",
+        "ASPNETCORE_ENVIRONMENT": "Developer",
         "DB_HOST" : "",
         "DB_PORT" : "",
         "DB_NAME" : "",
@@ -28,6 +27,19 @@
     "Achivement_2": {
       "commandName": "Project",
       "launchBrowser": true,
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Production",
+        "DB_HOST" : "",
+        "DB_PORT" : "",
+        "DB_NAME" : "",
+        "APP_PORT" : "5000",
+        "APP_HOST" : "localhost"
+      }
+    },
+    "Docker": {
+      "commandName": "Docker",
+      "launchBrowser": true,
+      "launchUrl" : "http://localhost:5000",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Production",
         "DB_HOST" : "",

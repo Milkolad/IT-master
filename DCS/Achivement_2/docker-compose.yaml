@@ -1,0 +1,36 @@
+version: "3"
+
+services: 
+
+  mongodbc:
+    image: mongo:3.6-jessie
+    ports:
+      - "27017:27017"
+    networks:
+      - backendapi
+    volumes:
+      - "/home/sapaul/bin/mongodb-3.6-docker/data/db/:/data/db"
+
+  
+  apiserver:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+      args:
+        - APP_PORT=5000
+    ports:
+      - "8000:5000"
+    networks:
+      - backendapi
+    environment:
+      - APP_HOST=localhost
+      - APP_PORT=5000
+      - DB_HOST=localhost
+      - DB_PORT=27017
+      - DB_NAME=Number
+
+
+
+networks:
+  backendapi:
+    

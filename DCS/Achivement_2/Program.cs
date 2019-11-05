@@ -20,7 +20,6 @@ namespace Achivement_2
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
                 .UseStartup<Startup>()
-                .UseUrls("http://" + Environment.GetEnvironmentVariable("APP_HOST") + ":" + Environment.GetEnvironmentVariable("APP_PORT"))
-                .UseKestrel();
+                .UseUrls($"http://{Environment.GetEnvironmentVariable("APP_HOST")}:{Environment.GetEnvironmentVariable("APP_PORT")}/");
     }
 }
