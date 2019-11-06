@@ -1,0 +1,33 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: achivement2
+  namespace: ns-15
+spec:
+  replicas: 3
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 25%
+  template:
+    metadata:
+      labels:
+        app: achivement2
+        namespace: ns-15
+    spec:
+      containers:
+      - name: achivement2
+        image: maximeremindocker/achivement2:latest
+        ports:
+        - containerPort: 80
+          name: achivement2
+          namespace: ns-15
+        volumeMounts:
+        - name: secrets
+          mountPath: /app/secrets
+          readOnly: true
+      volumes:
+      - name: secrets
+        secret:
+          secretName: secret-appsettings
