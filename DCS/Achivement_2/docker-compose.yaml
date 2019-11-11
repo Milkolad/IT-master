@@ -1,12 +1,12 @@
 version: "3"
 
-services: 
+services:
   mongo:
     image: mongo
     restart: always
     environment:
       MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: pass
+      MONGO_INITDB_ROOT_PASSWORD: example
     ports:
       - 27017:27017
   mongo-express:
@@ -16,7 +16,7 @@ services:
       - 8081:8081
     environment:
       ME_CONFIG_MONGODB_ADMINUSERNAME: root
-      ME_CONFIG_MONGODB_ADMINPASSWORD: pass
+      ME_CONFIG_MONGODB_ADMINPASSWORD: example
     depends_on:
       - mongo
   achivement2:
@@ -31,5 +31,7 @@ services:
       - DB_HOST=localhost
       - DB_PORT=27017
       - DB_NAME=Number
+    depends_on: 
+      - mongo
 
     
