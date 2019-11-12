@@ -16,9 +16,15 @@ namespace Achivement_2
 {
     public class Startup
     {
-         public Startup(IConfiguration configuration)
+         public Startup(IHostingEnvironment env)
         {
-            Configuration = configuration;
+            var builder = new ConfigurationBuilder()
+                .SetBasePath(env.ContentRootPath)
+                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+                .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
+                .AddEnvironmentVariables();
+
+            Configuration = builder.Build();
         }
 
         public IConfiguration Configuration { get; }
@@ -26,31 +32,34 @@ namespace Achivement_2
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            
+            services.AddSingleton<RedisCache>(sp =>
+            {
+                return new RedisCache() 
+                    { 
+                        Configuration = Environment.GetEnvironmentVariable("DB_HOST") + 
+                        ":" + 
+                        Environment.GetEnvironmentVariable("DB_PORT") + 
+                        ",abortConnect=False"
+                    };
+            });
 
-            services.Configure<NumberstoreDatabaseSettings>(
-                Configuration.GetSection(nameof(NumberstoreDatabaseSettings))
-            );
+            services.AddSingleton<StorageContext>(sp => 
+            {
+                return new StorageContext(sp.GetRequiredService<RedisCache>());
+            });
 
-            services.AddSingleton<INumberstoreDatabaseSettings>(sp =>
-                sp.GetRequiredService<IOptions<NumberstoreDatabaseSettings>>().Value);
-
-            services.AddTransient<IRepository<NumberEntity>, NumberRepository>();
-
+            services.AddTransient<IRepository<NumberEntity>, NumberRepository>(sp =>
+            {
+                return new NumberRepository(sp.GetRequiredService<StorageContext>(), Environment.GetEnvironmentVariable("DB_NAME"));
+            });
             
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
             app.UseDeveloperExceptionPage();
-
-            app.UseHttpsRedirection();
-            
-            app.UseMvc(routes =>
-            {
-                routes.MapRoute(
-                    name: "default",
-                    template: "{controller=ValueController}");
-            });
+            app.UseMvc();
         }
     }
 }

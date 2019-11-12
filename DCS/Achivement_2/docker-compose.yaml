@@ -1,37 +1,41 @@
 version: "3"
 
+networks:
+  app-tier:
+    driver: bridge
+
 services:
-  mongo:
-    image: mongo
-    restart: always
+  redis:
+    image: 'redis:latest'
+    container_name: redis
     environment:
-      MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: example
+      - ALLOW_EMPTY_PASSWORD=yes
+    expose:
+      - "6379"
     ports:
-      - 27017:27017
-  mongo-express:
-    image: mongo-express
-    restart: always
-    ports:
-      - 8081:8081
-    environment:
-      ME_CONFIG_MONGODB_ADMINUSERNAME: root
-      ME_CONFIG_MONGODB_ADMINPASSWORD: example
-    depends_on:
-      - mongo
+      - "6379:6379"
+    networks:
+      - app-tier
+
   achivement2:
     build:
       context: .
       dockerfile: ./Dockerfile
+    image: achivement2:latest
+    container_name: achivement2
     ports:
       - "5000:80"
+    expose:
+      - "5000"
     environment:
       - APP_HOST=localhost
       - APP_PORT=5000
       - DB_HOST=localhost
-      - DB_PORT=27017
+      - DB_PORT=6379
       - DB_NAME=Number
-    depends_on: 
-      - mongo
+    networks:
+      - app-tier
+    depends_on:
+    - "redis"
 
     

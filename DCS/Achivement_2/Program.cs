@@ -19,8 +19,9 @@ namespace Achivement_2
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
+                .UseKestrel()
                 .UseContentRoot(Directory.GetCurrentDirectory())
-                .UseStartup<Startup>()
-                .UseUrls($"http://{Environment.GetEnvironmentVariable("APP_HOST")}:{Environment.GetEnvironmentVariable("APP_PORT")}/");
+                .UseUrls($"http://{Environment.GetEnvironmentVariable("APP_HOST")}:{Environment.GetEnvironmentVariable("APP_PORT")}/")
+                .UseStartup<Startup>();
     }
 }
