@@ -1,14 +1,14 @@
 FROM microsoft/dotnet:2.1-aspnetcore-runtime AS base
 WORKDIR /app
-EXPOSE 80
 
 FROM microsoft/dotnet:2.1-sdk AS build
 WORKDIR /src
+EXPOSE 80
 
 COPY ["Achivement_2.csproj", "./"]
 RUN dotnet restore "Achivement_2.csproj"
 COPY . .
-WORKDIR "/src"
+WORKDIR /src
 RUN dotnet build "Achivement_2.csproj" -c Release -o /app
 
 FROM build AS publish

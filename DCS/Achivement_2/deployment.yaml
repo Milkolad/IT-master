@@ -1,10 +1,13 @@
 apiVersion: extensions/v1beta1
-kind: Deployment
+kind: Pod
 metadata:
   name: achivement2
   namespace: ns-15
 spec:
   replicas: 3
+  selector:
+    matchlabels:
+      app: achivement2
   strategy:
     type: RollingUpdate
     rollingUpdate:
@@ -17,17 +20,19 @@ spec:
         namespace: ns-15
     spec:
       containers:
-      - name: achivement2
-        image: maximeremindocker/achivement2:latest
-        ports:
-        - containerPort: 80
-          name: achivement2
+        - name: achivement2
           namespace: ns-15
-        volumeMounts:
-        - name: secrets
-          mountPath: /app/secrets
-          readOnly: true
-      volumes:
-      - name: secrets
-        secret:
-          secretName: secret-appsettings
+          image: maximeremindocker/achivement2:latest
+          ports:
+          - port: 80
+          env:
+          - name: APP_HOST
+            value: localhost
+          - name: APP_PORT
+            value: 5000
+          - name: DB_HOST
+            value: localhost
+          - name: DB_PORT
+            value: 6379
+          - name: DB_NAME
+            value: Number

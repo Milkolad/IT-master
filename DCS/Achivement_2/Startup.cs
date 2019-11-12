@@ -25,6 +25,7 @@ namespace Achivement_2
                 .AddEnvironmentVariables();
 
             Configuration = builder.Build();
+            Console.WriteLine(Configuration.GetSection("APP_PORT").Value);
         }
 
         public IConfiguration Configuration { get; }
@@ -37,9 +38,9 @@ namespace Achivement_2
             {
                 return new RedisCache() 
                     { 
-                        Configuration = Environment.GetEnvironmentVariable("DB_HOST") + 
+                        Configuration = Configuration.GetSection("DB_HOST").Value + 
                         ":" + 
-                        Environment.GetEnvironmentVariable("DB_PORT") + 
+                        Configuration.GetSection("DB_PORT").Value + 
                         ",abortConnect=False"
                     };
             });

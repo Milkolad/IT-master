@@ -21,7 +21,8 @@ namespace Achivement_2
             WebHost.CreateDefaultBuilder(args)
                 .UseKestrel()
                 .UseContentRoot(Directory.GetCurrentDirectory())
-                .UseUrls($"http://{Environment.GetEnvironmentVariable("APP_HOST")}:{Environment.GetEnvironmentVariable("APP_PORT")}/")
+                .UseUrls("http://" + Environment.GetEnvironmentVariable("APP_HOST") + ":" + Environment.GetEnvironmentVariable("APP_PORT"))
+                .UseIISIntegration()
                 .UseStartup<Startup>();
     }
 }
