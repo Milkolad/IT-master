@@ -1,5 +1,5 @@
-apiVersion: extensions/v1beta1
-kind: Pod
+apiVersion: apps/v1
+kind: Deployment
 metadata:
   name: achivement2
   namespace: ns-15
@@ -8,6 +8,7 @@ spec:
   selector:
     matchlabels:
       app: achivement2
+      tier: backend
   strategy:
     type: RollingUpdate
     rollingUpdate:
@@ -18,21 +19,26 @@ spec:
       labels:
         app: achivement2
         namespace: ns-15
+        tier: backend
     spec:
       containers:
         - name: achivement2
           namespace: ns-15
           image: maximeremindocker/achivement2:latest
+          resources:
+          limits:
+            memory: "1024Mi"
+            cpu: "500m"
           ports:
-          - port: 80
+          - containerPort: 80
           env:
           - name: APP_HOST
             value: localhost
           - name: APP_PORT
-            value: 5000
+            value: "5000"
           - name: DB_HOST
             value: localhost
           - name: DB_PORT
-            value: 6379
+            value: "6379"
           - name: DB_NAME
             value: Number

@@ -25,12 +25,14 @@ services:
     container_name: achivement2
     ports:
       - "5000:5000"
+    links:
+      - "redis"
     expose:
       - "5000"
     environment:
-      - APP_HOST=127.0.0.1
+      - APP_HOST=0.0.0.0
       - APP_PORT=5000
-      - DB_HOST=localhost
+      - DB_HOST=redis
       - DB_PORT=6379
       - DB_NAME=Number
     networks:

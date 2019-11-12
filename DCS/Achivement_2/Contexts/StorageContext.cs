@@ -6,15 +6,15 @@ namespace Achivement_2
 {
     public class StorageContext
     {
-        private readonly ConnectionMultiplexer _connection;
+        private readonly Lazy<ConnectionMultiplexer> _connection;
 
         public IDatabase Base { get; set; }
 
         public StorageContext(RedisCache cacheConnection)
         {
-            _connection = ConnectionMultiplexer.Connect(cacheConnection.Configuration); 
+            _connection = new Lazy<ConnectionMultiplexer>(() => ConnectionMultiplexer.Connect(cacheConnection.Configuration)); 
 
-            Base = _connection.GetDatabase();
+            Base = _connection.Value.GetDatabase();
         }
     }
 }

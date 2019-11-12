@@ -41,7 +41,7 @@ namespace Achivement_2
                         Configuration = Configuration.GetSection("DB_HOST").Value + 
                         ":" + 
                         Configuration.GetSection("DB_PORT").Value + 
-                        ",abortConnect=False"
+                        ",abortConnect=False,resolveDns=True"
                     };
             });
 
