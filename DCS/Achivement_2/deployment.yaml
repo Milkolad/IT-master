@@ -27,17 +27,17 @@ spec:
           image: maximeremindocker/achivement2:latest
           resources:
           limits:
-            memory: "1024Mi"
-            cpu: "500m"
+            memory: "2048Mi"
+            cpu: "1000m"
           ports:
           - containerPort: 80
           env:
           - name: APP_HOST
-            value: localhost
+            value: "0.0.0.0"
           - name: APP_PORT
             value: "5000"
           - name: DB_HOST
-            value: localhost
+            value: redis
           - name: DB_PORT
             value: "6379"
           - name: DB_NAME
