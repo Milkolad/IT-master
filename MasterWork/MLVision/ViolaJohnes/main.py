@@ -1,16 +1,23 @@
-import numpy as np
-import os
-from PIL import Image
 from argparse import ArgumentParser
-import cv2
 import time
+import cv2
+import numpy as np
 
 def integral_image(img):
-    new_img = np.array(img.shape)
-    
+    int_img = np.zeros(img.shape)
+    for i, _ in enumerate(img):
+        for j, _ in enumerate(img):
+            if i is not 0 and j is not 0:
+                int_img[i,j] = img[i,j] + img[i - 1,j]
+            elif i is not 0 and j is 0:
+                int_img[i,j] = img[i,j] + img[i - 1,j]
+            elif j is not 0 and i is 0:
+                int_img[i,j] = img[i,j] + img[i,j - 1]
+    return int_img
 
 def main(path):
     img = cv2.imread("./face.jpg")[::-1]
+    #img = cv2.imread("./face.jpg")
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
     clf = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
@@ -18,7 +25,7 @@ def main(path):
     print(cv2.getBuildInformation())
 
     start_t = time.perf_counter()
-    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    gray = cv2.cvtColor(img, cv2.COLOR_RGB2GRAY)
     end_t = time.perf_counter()
     img_to_gray = end_t - start_t
 
