@@ -8,16 +8,16 @@ def integral_image(img):
     for i, _ in enumerate(img):
         for j, _ in enumerate(img):
             if i is not 0 and j is not 0:
-                int_img[i,j] = img[i,j] + img[i - 1,j]
+                int_img[i, j] = img[i, j] + img[i - 1, j]
             elif i is not 0 and j is 0:
-                int_img[i,j] = img[i,j] + img[i - 1,j]
+                int_img[i, j] = img[i,j] + img[i - 1 ,j]
             elif j is not 0 and i is 0:
-                int_img[i,j] = img[i,j] + img[i,j - 1]
+                int_img[i, j] = img[i, j] + img[i, j - 1]
     return int_img
 
 def main(path):
-    img = cv2.imread("./face.jpg")[::-1]
-    #img = cv2.imread("./face.jpg")
+    #img = cv2.imread(path)[::-1]
+    img = cv2.imread(path)
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
     clf = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')

@@ -33,7 +33,7 @@ def main(path, predict_column):
 
     sk_y = np.array(swtch.convert_to(y)).T
 
-    x_train, x_test, y_train, y_test = train_test_split(sk_X, sk_y, test_size=0.3)    
+    x_train, x_test, y_train, y_test = train_test_split(sk_X, sk_y, test_size=0.3)
 
     sk_decisions = DecisionTreeClassifier(random_state=1370)
     sk_decisions.fit(x_train, y_train)
