@@ -5,7 +5,6 @@
 ### lsblk
 
 ```bash
-
 sda      8:0    0  40G  0 disk
 └─sda1   8:1    0  40G  0 part /
 
@@ -13,13 +12,13 @@ sda      8:0    0  40G  0 disk
 
 ### blkid
 
-```
+```bash
 /dev/sda1: UUID="8ac075e3-1124-4bb6-bef7-a6811bf8b870" TYPE="xfs"
 ```
 
 ### fdisk -l
 
-```
+```bash
 Disk /dev/sda: 42.9 GB, 42949672960 bytes, 83886080 sectors
 Units = sectors of 1 * 512 = 512 bytes
 Sector size (logical/physical): 512 bytes / 512 bytes
@@ -33,7 +32,7 @@ Disk identifier: 0x0009ef88
 
 ### parted -l
 
-```
+```bash
 Model: ATA VBOX HARDDISK (scsi)
 Disk /dev/sda: 42.9GB
 Sector size (logical/physical): 512B/512B
@@ -50,7 +49,106 @@ Number  Start   End     Size    Type     File system  Flags
 * Есть ли неразмеченное место на дисках?
     * Нет
 * Какой размер партиций?
-    * ``` 
-    /dev/sda1   *        2048    83886079    41942016   83  Linux
-    ```
+    * 
+        ```bash
+        /dev/sda1   *        2048    83886079    41942016   83  Linux
+        ```
+* Какая таблица партционирования используется?
+    * msdos
+* Какой диск, партция или лвм том смонтированы в /
+    *sda1
+
+## Создадим сжатую файловую систему для чтения squashfs
+
+### mksquash mai/* mai.sqsh
+```bash
+Parallel mksquashfs: Using 1 processor
+Creating 4.0 filesystem on mai.sqsh, block size 131072.
+[===============================================================================================================================================|] 27/27 100%
+
+Exportable Squashfs 4.0 filesystem, gzip compressed, data block size 131072
+        compressed data, compressed metadata, compressed fragments, compressed xattrs
+        duplicates are removed
+Filesystem size 50.94 Kbytes (0.05 Mbytes)
+        64.88% of uncompressed filesystem size (78.51 Kbytes)
+Inode table size 385 bytes (0.38 Kbytes)
+        22.36% of uncompressed inode table size (1722 bytes)
+Directory table size 379 bytes (0.37 Kbytes)
+        65.12% of uncompressed directory table size (582 bytes)
+Xattr table size 54 bytes (0.05 Kbytes)
+        100.00% of uncompressed xattr table size (54 bytes)
+Number of duplicate files found 1
+Number of inodes 32
+Number of files 28
+Number of fragments 1
+Number of symbolic links  0
+Number of device nodes 0
+Number of fifo nodes 0
+Number of socket nodes 0
+Number of directories 4
+Number of ids (unique uids + gids) 1
+Number of uids 1
+        root (0)
+Number of gids 1
+        root (0)
+```
+
+### После монтирования сжатой файловой системы mai.squash в директорию /mnt/mai
+
+#### df -h
+```bash
+/dev/sda1        40G  3.3G   37G   9% /
+devtmpfs        488M     0  488M   0% /dev
+tmpfs           496M     0  496M   0% /dev/shm
+tmpfs           496M  6.7M  489M   2% /run
+tmpfs           496M     0  496M   0% /sys/fs/cgroup
+tmpfs           100M     0  100M   0% /run/user/1000
+/dev/loop0      128K  128K     0 100% /mnt/mai
+```
+
+#### df -i 
+
+```
+/dev/sda1      20971008 36760 20934248    1% /
+devtmpfs         124867   309   124558    1% /dev
+tmpfs            126871     1   126870    1% /dev/shm
+tmpfs            126871   381   126490    1% /run
+tmpfs            126871    16   126855    1% /sys/fs/cgroup
+tmpfs            126871     1   126870    1% /run/user/1000
+/dev/loop0           32    32        0  100% /mnt/mai
+```
+#### mount
+
+```
+sysfs on /sys type sysfs (rw,nosuid,nodev,noexec,relatime,seclabel)
+proc on /proc type proc (rw,nosuid,nodev,noexec,relatime)
+devtmpfs on /dev type devtmpfs (rw,nosuid,seclabel,size=499468k,nr_inodes=124867,mode=755)
+securityfs on /sys/kernel/security type securityfs (rw,nosuid,nodev,noexec,relatime)
+tmpfs on /dev/shm type tmpfs (rw,nosuid,nodev,seclabel)
+devpts on /dev/pts type devpts (rw,nosuid,noexec,relatime,seclabel,gid=5,mode=620,ptmxmode=000)
+tmpfs on /run type tmpfs (rw,nosuid,nodev,seclabel,mode=755)
+tmpfs on /sys/fs/cgroup type tmpfs (ro,nosuid,nodev,noexec,seclabel,mode=755)
+cgroup on /sys/fs/cgroup/systemd type cgroup (rw,nosuid,nodev,noexec,relatime,seclabel,xattr,release_agent=/usr/lib/systemd/systemd-cgroups-agent,name=systemd)
+pstore on /sys/fs/pstore type pstore (rw,nosuid,nodev,noexec,relatime)
+cgroup on /sys/fs/cgroup/cpu,cpuacct type cgroup (rw,nosuid,nodev,noexec,relatime,seclabel,cpuacct,cpu)
+cgroup on /sys/fs/cgroup/freezer type cgroup (rw,nosuid,nodev,noexec,relatime,seclabel,freezer)
+cgroup on /sys/fs/cgroup/devices type cgroup (rw,nosuid,nodev,noexec,relatime,seclabel,devices)
+cgroup on /sys/fs/cgroup/net_cls,net_prio type cgroup (rw,nosuid,nodev,noexec,relatime,seclabel,net_prio,net_cls)
+cgroup on /sys/fs/cgroup/hugetlb type cgroup (rw,nosuid,nodev,noexec,relatime,seclabel,hugetlb)
+cgroup on /sys/fs/cgroup/pids type cgroup (rw,nosuid,nodev,noexec,relatime,seclabel,pids)
+cgroup on /sys/fs/cgroup/perf_event type cgroup (rw,nosuid,nodev,noexec,relatime,seclabel,perf_event)
+cgroup on /sys/fs/cgroup/blkio type cgroup (rw,nosuid,nodev,noexec,relatime,seclabel,blkio)
+cgroup on /sys/fs/cgroup/cpuset type cgroup (rw,nosuid,nodev,noexec,relatime,seclabel,cpuset)
+cgroup on /sys/fs/cgroup/memory type cgroup (rw,nosuid,nodev,noexec,relatime,seclabel,memory)
+configfs on /sys/kernel/config type configfs (rw,relatime)
+/dev/sda1 on / type xfs (rw,relatime,seclabel,attr2,inode64,noquota)
+selinuxfs on /sys/fs/selinux type selinuxfs (rw,relatime)
+systemd-1 on /proc/sys/fs/binfmt_misc type autofs (rw,relatime,fd=24,pgrp=1,timeout=0,minproto=5,maxproto=5,direct,pipe_ino=13390)
+mqueue on /dev/mqueue type mqueue (rw,relatime,seclabel)
+hugetlbfs on /dev/hugepages type hugetlbfs (rw,relatime,seclabel)
+debugfs on /sys/kernel/debug type debugfs (rw,relatime)
+sunrpc on /var/lib/nfs/rpc_pipefs type rpc_pipefs (rw,relatime)
+tmpfs on /run/user/1000 type tmpfs (rw,nosuid,nodev,relatime,seclabel,size=101500k,mode=700,uid=1000,gid=1000)
+/home/vagrant/mai.sqsh on /mnt/mai type squashfs (ro,relatime,seclabel)
+```
 
