@@ -152,3 +152,117 @@ tmpfs on /run/user/1000 type tmpfs (rw,nosuid,nodev,relatime,seclabel,size=10150
 /home/vagrant/mai.sqsh on /mnt/mai type squashfs (ro,relatime,seclabel)
 ```
 
+* Какая файловая система примонтирована в /
+    * sda1
+* С какими опциями примонтирована файловая система в /
+    * type - xfs, rw,relatime,seclabel,attr2,inode64,noquota
+* Какой размер файловой системы приментированной в /mnt/mai
+    * 128K
+
+## Попробуем создать файлик в каталоге /dev/shm
+
+### dd if=/dev/zero of=/dev/shm/mai bs=1M count=100
+
+```
+100+0 records in
+100+0 records out
+104857600 bytes (105 MB) copied, 0.0303084 s, 3.5 GB/s
+```
+
+### free -h
+```
+             total        used        free      shared  buff/cache   available
+Mem:           991M         83M        125M        106M        782M        602M
+Swap:          2.0G          0B        2.0G
+```
+
+### free -h после rm -f /dev/shm/mai
+```
+              total        used        free      shared  buff/cache   available
+Mem:           991M         83M        225M        6.7M        682M        703M
+Swap:          2.0G          0B        2.0G
+```
+
+* Что такое tmpfs
+    * Временное файловое хранилище для монтирования файловых систем, размещаемых в ОЗУ
+* Какая часть памяти изменялась? 
+    * Свободная
+
+## Изучим процессы запущенные в системе
+
+### ps -eF
+
+```
+UID        PID  PPID  C    SZ   RSS PSR STIME TTY          TIME CMD
+root         1     0  0 32025  6672   0 08:15 ?        00:00:01 /usr/lib/systemd/systemd --switched-root --system --deserialize 21
+root         2     0  0     0     0   0 08:15 ?        00:00:00 [kthreadd]
+root         3     2  0     0     0   0 08:15 ?        00:00:00 [ksoftirqd/0]
+root         5     2  0     0     0   0 08:15 ?        00:00:00 [kworker/0:0H]
+root         6     2  0     0     0   0 08:15 ?        00:00:00 [kworker/u2:0]
+root         7     2  0     0     0   0 08:15 ?        00:00:00 [migration/0]
+...
+postfix  28046  2545  0 22440  4044   0 09:55 ?        00:00:00 pickup -l -t unix -u
+root     28050  4750  0 25711  5500   0 09:59 ?        00:00:00 /sbin/dhclient -d -q -sf /usr/libexec/nm-dhcp-helper -pf /var/run/dhclient-eth0.pid -lf /var/l
+root     28174  2397  0 38665  5556   0 10:00 ?        00:00:00 sshd: vagrant [priv]
+vagrant  28177 28174  0 38665  2424   0 10:00 ?        00:00:00 sshd: vagrant@pts/0
+vagrant  28178 28177  0 29092  3032   0 10:00 pts/0    00:00:00 -bash
+root     28238 28178  0 47976  2392   0 10:02 pts/0    00:00:00 su
+root     28242 28238  0 29098  3052   0 10:02 pts/0    00:00:00 bash
+root     28295     2  0     0     0   0 10:27 ?        00:00:00 [kworker/0:2]
+root     28317     2  0     0     0   0 10:30 ?        00:00:00 [loop0]
+root     28349     2  0     0     0   0 10:53 ?        00:00:00 [kworker/0:1]
+root     28366     2  0     0     0   0 11:01 ?        00:00:00 [kworker/0:0]
+root     28367 28242  0 38841  1856   0 11:01 pts/0    00:00:00 ps -eF
+```
+
+### ps rx 
+```
+  PID TTY      STAT   TIME COMMAND
+    9 ?        R      0:00 [rcu_sched]
+28366 ?        R      0:00 [kworker/0:0]
+28368 pts/0    R+     0:00 ps rx
+```
+
+### ps -e --forest 
+```
+...
+ 2393 ?        00:00:01 tuned
+ 2395 ?        00:00:00 rsyslogd
+ 2397 ?        00:00:00 sshd
+28174 ?        00:00:00  \_ sshd
+28177 ?        00:00:00      \_ sshd
+28178 pts/0    00:00:00          \_ bash
+28238 pts/0    00:00:00              \_ su
+28242 pts/0    00:00:00                  \_ bash
+28369 pts/0    00:00:00                      \_ ps
+ 2545 ?        00:00:00 master
+ 2554 ?        00:00:00  \_ qmgr
+28046 ?        00:00:00  \_ pickup
+ 4750 ?        00:00:00 NetworkManager
+28050 ?        00:00:00  \_ dhclient
+ 5607 ?        00:00:00 crond
+ 5715 ?        00:00:00 lvmetad
+ 5870 ?        00:00:00 auditd
+```
+
+### ps -efL
+
+```
+UID        PID  PPID   LWP  C NLWP STIME TTY          TIME CMD
+root         1     0     1  0    1 08:15 ?        00:00:01 /usr/lib/systemd/systemd --switched-root --system --deserialize 21
+root         2     0     2  0    1 08:15 ?        00:00:00 [kthreadd]
+root         3     2     3  0    1 08:15 ?        00:00:00 [ksoftirqd/0]
+root         5     2     5  0    1 08:15 ?        00:00:00 [kworker/0:0H]
+root         6     2     6  0    1 08:15 ?        00:00:00 [kworker/u2:0]
+root         7     2     7  0    1 08:15 ?        00:00:00 [migration/0]
+root         8     2     8  0    1 08:15 ?        00:00:00 [rcu_bh]
+root         9     2     9  0    1 08:15 ?        00:00:00 [rcu_sched]
+root        10     2    10  0    1 08:15 ?        00:00:00 [lru-add-drain]
+...
+```
+
+* Какие процессы в системе порождают дочерние процессы через fork
+    *
+* Какие процессы в системе являются мультитредовыми
+    *
+
