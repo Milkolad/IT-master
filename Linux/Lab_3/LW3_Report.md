@@ -31,3 +31,26 @@ Disk identifier: 0x0009ef88
 /dev/sda1   *        2048    83886079    41942016   83  Linux
 ```
 
+### parted -l
+
+```
+Model: ATA VBOX HARDDISK (scsi)
+Disk /dev/sda: 42.9GB
+Sector size (logical/physical): 512B/512B
+Partition Table: msdos
+Disk Flags:
+
+Number  Start   End     Size    Type     File system  Flags
+ 1      1049kB  42.9GB  42.9GB  primary  xfs          boot
+
+```
+
+* Какой размер дисков?
+    * 40 GB (41921540 bytes)
+* Есть ли неразмеченное место на дисках?
+    * Нет
+* Какой размер партиций?
+    * ``` 
+    /dev/sda1   *        2048    83886079    41942016   83  Linux
+    ```
+
