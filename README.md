@@ -23,3 +23,10 @@ sudakov@ws-dss.com
 * Воротникова Милана
 
 * Степанов Александр
+
+
+### Linux
+
+Отчеты по лабораторным работам 
+
+* [Лабораторная работа 3](https://github.com/MaximDmitrievich/IT-master/blob/master/Linux/Lab_3/LW3_Report.md)
